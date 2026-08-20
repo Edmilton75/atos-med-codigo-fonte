@@ -1,0 +1,4 @@
+import type { Metadata } from "next";
+import { SiteShell } from "../site-shell";
+export const metadata: Metadata={title:"Termos de Uso"};
+export default function Terms(){return <SiteShell><section className="page-hero"><div className="page-title"><span className="eyebrow"><i/> Informações legais</span><h1>Termos de Uso</h1><p>Modelo inicial para revisão antes da publicação definitiva.</p></div></section><article className="legal content-section"><h2>Conteúdo informativo</h2><p>As informações deste site possuem caráter institucional e não substituem avaliação, diagnóstico ou acompanhamento profissional.</p><h2>Agendamentos</h2><p>Solicitações enviadas pelos canais digitais dependem de confirmação da equipe da clínica.</p><h2>Uso responsável</h2><p>Em situações de urgência ou emergência, procure os serviços públicos adequados da sua região.</p></article></SiteShell>}
