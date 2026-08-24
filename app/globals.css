@@ -288,9 +288,9 @@ main {
 }
 .highlight-card {
   padding: 30px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--petrol);
   border-radius: 22px;
-  background: #fff;
+  background: var(--petrol);
   transition: 0.25s;
 }
 .highlight-card:hover {
@@ -305,13 +305,13 @@ main {
 .highlight-card h3 {
   font-family: Georgia, serif;
   font-size: 21px;
-  color: var(--petrol);
+  color: var(--line);
   margin: 42px 0 12px;
 }
 .highlight-card p {
   font-size: 14px;
   line-height: 1.65;
-  color: var(--muted);
+  color: var(--mist);
 }
 .specialties-preview {
   background: var(--petrol);
