@@ -306,7 +306,8 @@ main {
   font-family: Georgia, serif;
   font-size: 21px;
   color: var(--line);
-  margin: 42px 0 12px;
+  margin: 0px 0 12px;
+  text-transform: capitalize;
 }
 .highlight-card p {
   font-size: 14px;
@@ -746,7 +747,7 @@ main {
   }
   .logo-stage {
     width: 76%;
-    border-radius: 40px;
+  
   }
   .floating-note {
     padding: 12px;
