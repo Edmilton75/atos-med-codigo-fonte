@@ -1,3 +1,4 @@
+import { getContent } from "@/lib/content-server";
 import Link from "next/link";
 import { SiteShell, WhatsAppLink } from "./site-shell";
 
@@ -20,59 +21,10 @@ const highlights = [
   ],
 ];
 
-const specialties = [
-  [
-    "Psicologia",
-    "Acolhimento e acompanhamento para diferentes fases da vida.",
-    "◌",
-  ],
-  [
-    "Psiquiatria",
-    "Avaliação médica responsável e cuidado integrado em saúde mental.",
-    "+",
-  ],
-  [
-    "Neuropsicologia",
-    "Compreensão de aspectos cognitivos, emocionais e comportamentais.",
-    "◇",
-  ],
-  [
-    "Terapia Ocupacional",
-    "Autonomia, participação e qualidade de vida no cotidiano.",
-    "↗",
-  ],
-  [
-    "Nutrição",
-    "Orientação alimentar individualizada para saúde e bem-estar.",
-    "⌁",
-  ],
-  [
-    "Desenvolvimento Infantil",
-    "Acompanhamento atento ao desenvolvimento e à família.",
-    "✦",
-  ],
-];
-
-const faqs = [
-  [
-    "Como faço para agendar uma consulta?",
-    "Entre em contato pelo WhatsApp. Nossa equipe irá orientar sobre profissionais, modalidades e disponibilidade.",
-  ],
-  [
-    "A clínica atende crianças e adolescentes?",
-    "Sim. A Atos Med reúne especialidades e profissionais preparados para diferentes fases da vida.",
-  ],
-  [
-    "Existem atendimentos online?",
-    "Alguns profissionais oferecem atendimento online. Consulte a modalidade disponível no perfil ou fale com a recepção.",
-  ],
-  [
-    "Como escolher o profissional mais adequado?",
-    "Nossa recepção pode ajudar a identificar a especialidade mais indicada para sua necessidade, sem realizar diagnóstico pelo atendimento digital.",
-  ],
-];
-
-export default function Home() {
+export default async function Home() {
+  const { settings, specialties: allSpecialties } = await getContent();
+  const specialties = allSpecialties.slice(0, 6);
+  const faqs = settings.faqs.map((f) => [f.question, f.answer]);
   return (
     <SiteShell>
       <section className="hero">
@@ -80,11 +32,8 @@ export default function Home() {
           <span className="eyebrow">
             <i /> Saúde mental • bem-estar • qualidade de vida
           </span>
-          <h1>Cuidar da mente também é cuidar da vida.</h1>
-          <p>
-            Atendimento humanizado e multidisciplinar para promover equilíbrio
-            emocional, autonomia e qualidade de vida em todas as fases.
-          </p>
+          <h1>{settings.heroTitle}</h1>
+          <p>{settings.heroText}</p>
           <div className="hero-actions">
             <WhatsAppLink className="button button-primary">
               Agendar pelo WhatsApp <span>↗</span>
@@ -106,7 +55,10 @@ export default function Home() {
           <div className="hero-orbit orbit-one" />
           <div className="hero-orbit orbit-two" />
           <div className="logo-stage">
-            <img src="/logo-atos-med.jpeg" alt="Atos Med" />
+            <img
+              src={settings.heroImage || "/logo-atos-med.jpeg"}
+              alt="Atos Med"
+            />
           </div>
         </div>
       </section>
@@ -116,14 +68,11 @@ export default function Home() {
           <span className="eyebrow">
             <i /> Sobre a Atos Med
           </span>
-          <h2>Um espaço pensado para cuidar de você</h2>
-          <p>
-            Unimos diferentes áreas do cuidado em um ambiente contemporâneo,
-            tranquilo e humano, respeitando a história e o tempo de cada pessoa.
-          </p>
+          <h2>{settings.introTitle}</h2>
+          <p>{settings.introText}</p>
         </div>
         <div className="highlight-grid">
-          {highlights.map(([title, text], index) => (
+          {highlights.map(([title, text]) => (
             <article className="highlight-card" key={title}>
               {/* <span className="number">0{index + 1}</span> */}
               <h3>{title}</h3>
@@ -146,13 +95,9 @@ export default function Home() {
           </Link>
         </div>
         <div className="specialty-grid">
-          {specialties.map(([title, text, icon]) => (
+          {specialties.map(({ name: title, summary: text, icon, slug }) => (
             <Link
-              href={`/especialidades/${title
-                .toLowerCase()
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-                .replaceAll(" ", "-")}`}
+              href={`/especialidades/${slug}`}
               className="specialty-card"
               key={title}
             >

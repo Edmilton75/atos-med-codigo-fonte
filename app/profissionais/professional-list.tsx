@@ -25,11 +25,11 @@ export function ProfessionalList({ items }: { items: Professional[] }) {
         ))}
       </div>
       <div className="professional-grid">
-        {filtered.map((item, index) => (
+        {filtered.map((item) => (
           <article className="professional-card" key={item.slug}>
             <div className="portrait">
               <img
-                src={item.image}
+                src={item.image || "/logo-atos-med.jpeg"}
                 alt={item.imageAlt}
                 loading="lazy"
                 style={{

@@ -3,21 +3,24 @@
 import Link from "next/link";
 import { useState } from "react";
 
-const whatsapp =
-  "https://wa.me/55XXXXXXXXXXX?text=Ol%C3%A1!%20Acessei%20o%20site%20da%20Atos%20Med%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es%20sobre%20os%20atendimentos.";
+import { useSettings } from "./settings-provider";
+import { whatsappUrl } from "@/lib/content";
 
 export function WhatsAppLink({
   children,
   className = "",
   ariaLabel,
+  message,
 }: {
   children: React.ReactNode;
   className?: string;
   ariaLabel?: string;
+  message?: string;
 }) {
+  const settings = useSettings();
   return (
     <a
-      href={whatsapp}
+      href={whatsappUrl(settings.whatsapp, message)}
       target="_blank"
       rel="noreferrer"
       className={className}
@@ -29,6 +32,7 @@ export function WhatsAppLink({
 }
 
 export function SiteShell({ children }: { children: React.ReactNode }) {
+  const settings = useSettings();
   const [menuOpen, setMenuOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   return (
@@ -77,10 +81,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       <footer className="footer">
         <div className="footer-brand">
           <img src="/logo-atos-med.jpeg" alt="Atos Med" />
-          <p>
-            Saúde mental, bem-estar e qualidade de vida com cuidado humano e
-            integrado.
-          </p>
+          <p>{settings.footerText}</p>
         </div>
         <div>
           <h3>Navegue</h3>
@@ -94,22 +95,31 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
           <Link href="/contato">Contato</Link>
           <Link href="/politica-de-privacidade">Privacidade</Link>
           <Link href="/termos-de-uso">Termos de uso</Link>
+          <Link href="/admin">Área de gestão</Link>
         </div>
         <div>
           <h3>Atendimento</h3>
           <WhatsAppLink>WhatsApp</WhatsAppLink>
           <a
-            href="https://instagram.com/USUARIO"
+            href={
+              settings.instagram
+                ? `https://instagram.com/${settings.instagram.replace(/^@/, "")}`
+                : "/contato"
+            }
             target="_blank"
             rel="noreferrer"
           >
             Instagram
           </a>
-          <span>Seg a Sex • 8h às 18h</span>
+          <span>{settings.hours}</span>
         </div>
         <div className="footer-bottom">
           <span>© 2026 Atos Med. Todos os direitos reservados.</span>
-          <span>Conteúdo demonstrativo — substitua pelos dados oficiais.</span>
+          {settings.demoNotice && (
+            <span>
+              Conteúdo demonstrativo — substitua pelos dados oficiais.
+            </span>
+          )}
         </div>
       </footer>
       <div className="floating-actions">

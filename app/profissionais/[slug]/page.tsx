@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { professionals } from "../../data";
-import { SiteShell } from "../../site-shell";
+import { getContent } from "@/lib/content-server";
+import { SiteShell, WhatsAppLink } from "../../site-shell";
 
-export function generateStaticParams() {
-  return professionals.map((item) => ({ slug: item.slug }));
-}
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+  const { professionals } = await getContent();
   const item = professionals.find((p) => p.slug === slug);
   return item
     ? {
@@ -30,17 +28,16 @@ export default async function ProfessionalDetail({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const { professionals } = await getContent();
   const item = professionals.find((p) => p.slug === slug);
   if (!item) notFound();
-  const message = encodeURIComponent(
-    `Olá! Gostaria de informações sobre atendimento com ${item.name}.`,
-  );
+  const message = `Olá! Gostaria de informações sobre atendimento com ${item.name}.`;
   return (
     <SiteShell>
       <section className="profile-hero">
         <div className="profile-photo">
           <img
-            src={item.image}
+            src={item.image || "/logo-atos-med.jpeg"}
             alt={item.imageAlt}
             style={{
               objectPosition: item.imagePosition ?? "center",
@@ -62,14 +59,9 @@ export default async function ProfessionalDetail({
               <span key={area}>{area}</span>
             ))}
           </div>
-          <a
-            className="button button-primary"
-            target="_blank"
-            rel="noreferrer"
-            href={`https://wa.me/55XXXXXXXXXXX?text=${message}`}
-          >
+          <WhatsAppLink className="button button-primary" message={message}>
             Agendar com este profissional ↗
-          </a>
+          </WhatsAppLink>
         </div>
       </section>
       <section className="content-section profile-details">
@@ -104,6 +96,8 @@ export default async function ProfessionalDetail({
             "Quarta-feira",
             "Quinta-feira",
             "Sexta-feira",
+            "Sábado",
+            "Domingo",
           ].map((day) => {
             const found = item.schedule.find((s) => s.day === day);
             return (
