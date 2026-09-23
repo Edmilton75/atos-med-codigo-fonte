@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { getContent } from "@/lib/content-server";
 import { SettingsProvider } from "./settings-provider";
 export const dynamic = "force-dynamic";
+
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -44,6 +46,7 @@ export default async function RootLayout({
   return (
     <html lang="pt-BR">
       <body>
+        <Analytics />
         <SettingsProvider settings={settings}>{children}</SettingsProvider>
       </body>
     </html>
